@@ -1,13 +1,16 @@
 import streamlit as st
 
-# 눈 효과 (기본 제공)
-st.snow()
-
+# ✅ 페이지 설정은 반드시 최상단에
 st.set_page_config(page_title="MBTI 진로 추천기", page_icon="❄️", layout="centered")
 
+# 눈 효과 (기본 내장)
+st.snow()
+
+# 타이틀
 st.title("🔮 MBTI로 보는 진로 추천")
 st.markdown("당신의 **MBTI**를 선택하면 어울리는 직업을 추천해드려요! 💼✨")
 
+# MBTI 목록 및 추천 직업 딕셔너리
 mbti_types = [
     "INTJ", "INTP", "ENTJ", "ENTP",
     "INFJ", "INFP", "ENFJ", "ENFP",
@@ -34,8 +37,10 @@ mbti_jobs = {
     "ESFP": ("배우 🎭", "가수 🎤", "방송인 📺")
 }
 
+# 선택 박스
 selected_mbti = st.selectbox("🎯 당신의 MBTI를 선택하세요", mbti_types)
 
+# 결과 표시
 if selected_mbti:
     st.subheader(f"💡 {selected_mbti}에게 어울리는 직업")
     for job in mbti_jobs[selected_mbti]:
