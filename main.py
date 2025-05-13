@@ -1,13 +1,48 @@
 import streamlit as st
+import random
 
 # 페이지 설정
-st.set_page_config(page_title="MBTI 진로 추천기", page_icon="🔮", layout="centered")
+st.set_page_config(page_title="MBTI 진로 추천기", page_icon="✨", layout="centered")
+
+# 배경 스타일 및 눈(Snow) 효과 추가
+st.markdown("""
+    <style>
+    body {
+        background: linear-gradient(to right, #e0c3fc, #8ec5fc);
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+    }
+    .snowflake {
+        position: fixed;
+        top: 0;
+        z-index: 9999;
+        font-size: 1.5em;
+        animation: fall linear infinite;
+        color: white;
+        opacity: 0.8;
+    }
+    @keyframes fall {
+        0% {transform: translateY(0);}
+        100% {transform: translateY(100vh);}
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# 눈 이모지 여러 개 생성 (JS 대신 CSS로 한정 구현)
+for i in range(20):
+    st.markdown(f"""
+        <div class="snowflake" style="left: {random.randint(0, 100)}%;">
+            ❄️
+        </div>
+    """, unsafe_allow_html=True)
 
 # 제목
-st.title("🔮 MBTI로 보는 진로 추천")
-st.markdown("당신의 **MBTI** 유형을 선택하면, 어울리는 직업을 추천해드려요! 💼✨")
+st.markdown("""
+    <h1 style='text-align: center; color: #ffffff; text-shadow: 0 0 10px #ff00ff;'>🔮 MBTI로 보는 진로 추천</h1>
+    <p style='text-align: center; font-size: 1.2em;'>당신의 <strong>MBTI</strong>를 선택하면 어울리는 직업을 추천해드려요! 💼✨</p>
+""", unsafe_allow_html=True)
 
-# MBTI 리스트
+# MBTI 선택
 mbti_types = [
     "INTJ", "INTP", "ENTJ", "ENTP",
     "INFJ", "INFP", "ENFJ", "ENFP",
@@ -15,7 +50,6 @@ mbti_types = [
     "ISTP", "ISFP", "ESTP", "ESFP"
 ]
 
-# MBTI 별 직업 추천
 mbti_jobs = {
     "INTJ": ("전략 컨설턴트 💼", "시스템 설계자 🛠️", "데이터 과학자 📊"),
     "INTP": ("연구원 🔬", "이론 물리학자 🧪", "UX 디자이너 🎨"),
@@ -35,17 +69,20 @@ mbti_jobs = {
     "ESFP": ("배우 🎭", "가수 🎤", "방송인 📺")
 }
 
-# 사용자 입력
-selected_mbti = st.selectbox("당신의 MBTI는 무엇인가요? 😊", mbti_types)
+selected_mbti = st.selectbox("✨ MBTI를 선택하세요", mbti_types)
 
-# 추천 결과 출력
 if selected_mbti:
-    st.subheader(f"✨ {selected_mbti}에게 어울리는 직업은?")
+    st.markdown(f"""
+        <h2 style='color:#FFD700; text-shadow: 0 0 5px #fff;'>💡 {selected_mbti}에게 어울리는 직업</h2>
+    """, unsafe_allow_html=True)
+
     for job in mbti_jobs[selected_mbti]:
-        st.markdown(f"- {job}")
-    
-    st.success("이 직업들이 당신의 성향과 잘 어울릴 수 있어요! 💡")
+        st.markdown(f"<p style='font-size:1.1em;'>✅ {job}</p>", unsafe_allow_html=True)
+
+    st.success("✨ 이 직업들이 당신의 성향과 잘 어울릴 수 있어요!")
 
 # 푸터
-st.markdown("---")
-st.markdown("Made with ❤️ by [Your Name or Team]")
+st.markdown("""
+    <hr>
+    <p style='text-align: center; font-size: 0.9em;'>Made with ❤️ by Seonhanmokja EDU</p>
+""", unsafe_allow_html=True)
