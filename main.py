@@ -15,7 +15,7 @@ st.markdown("다양한 정렬 알고리즘의 동작 과정을 시각적으로 �
 # 사이드바 설정
 st.sidebar.header("설정")
 array_size = st.sidebar.slider("배열 크기", 5, 50, 20)
-speed = st.sidebar.slider("정렬 속도", 0.1, 2.0, 0.5)
+speed = st.sidebar.select_slider("정렬 속도", options=[0.5, 1.0, 1.5, 2.0], value=1.0)
 sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 
 # 정렬 알고리즘 선택 (체크박스)
@@ -29,44 +29,51 @@ if 'array' not in st.session_state:
     st.session_state.array = np.random.randint(1, 100, array_size)
 
 # 정렬 함수들
-def bubble_sort(arr, frames, sorted_indices):
+def bubble_sort(arr, frames, sorted_indices, current_indices):
     n = len(arr)
     start_time = time.time()
     for i in range(n):
         for j in range(0, n-i-1):
+            current_indices.clear()
+            current_indices.extend([j, j+1])
             if (sort_order == "오름차순" and arr[j] > arr[j+1]) or \
                (sort_order == "내림차순" and arr[j] < arr[j+1]):
                 arr[j], arr[j+1] = arr[j+1], arr[j]
-                frames.append((arr.copy(), sorted_indices.copy()))
+            frames.append((arr.copy(), sorted_indices.copy(), current_indices.copy()))
         sorted_indices.append(n-i-1)
     return time.time() - start_time
 
-def selection_sort(arr, frames, sorted_indices):
+def selection_sort(arr, frames, sorted_indices, current_indices):
     n = len(arr)
     start_time = time.time()
     for i in range(n):
         min_idx = i
         for j in range(i+1, n):
+            current_indices.clear()
+            current_indices.extend([i, j])
             if (sort_order == "오름차순" and arr[j] < arr[min_idx]) or \
                (sort_order == "내림차순" and arr[j] > arr[min_idx]):
                 min_idx = j
+            frames.append((arr.copy(), sorted_indices.copy(), current_indices.copy()))
         arr[i], arr[min_idx] = arr[min_idx], arr[i]
-        frames.append((arr.copy(), sorted_indices.copy()))
+        frames.append((arr.copy(), sorted_indices.copy(), current_indices.copy()))
         sorted_indices.append(i)
     return time.time() - start_time
 
-def insertion_sort(arr, frames, sorted_indices):
+def insertion_sort(arr, frames, sorted_indices, current_indices):
     start_time = time.time()
     for i in range(1, len(arr)):
         key = arr[i]
         j = i-1
         while j >= 0 and ((sort_order == "오름차순" and arr[j] > key) or \
                          (sort_order == "내림차순" and arr[j] < key)):
+            current_indices.clear()
+            current_indices.extend([j, j+1])
             arr[j+1] = arr[j]
             j -= 1
-            frames.append((arr.copy(), sorted_indices.copy()))
+            frames.append((arr.copy(), sorted_indices.copy(), current_indices.copy()))
         arr[j+1] = key
-        frames.append((arr.copy(), sorted_indices.copy()))
+        frames.append((arr.copy(), sorted_indices.copy(), current_indices.copy()))
         sorted_indices.append(i)
     return time.time() - start_time
 
@@ -74,7 +81,7 @@ def insertion_sort(arr, frames, sorted_indices):
 st.subheader("초기 배열")
 initial_plot = st.empty()
 fig, ax = plt.subplots(figsize=(10, 4))
-bars = ax.bar(range(len(st.session_state.array)), st.session_state.array, color='pink')
+bars = ax.bar(range(len(st.session_state.array)), st.session_state.array, color='blue')
 ax.set_title("정렬 전 배열")
 initial_plot.pyplot(fig)
 plt.close()
@@ -91,21 +98,24 @@ if st.button("정렬 시작"):
         arr = st.session_state.array.copy()
         frames["버블 정렬"] = []
         sorted_indices = []
-        execution_times["버블 정렬"] = bubble_sort(arr, frames["버블 정렬"], sorted_indices)
+        current_indices = []
+        execution_times["버블 정렬"] = bubble_sort(arr, frames["버블 정렬"], sorted_indices, current_indices)
         results["버블 정렬"] = arr.copy()
     
     if selection_sort_selected:
         arr = st.session_state.array.copy()
         frames["선택 정렬"] = []
         sorted_indices = []
-        execution_times["선택 정렬"] = selection_sort(arr, frames["선택 정렬"], sorted_indices)
+        current_indices = []
+        execution_times["선택 정렬"] = selection_sort(arr, frames["선택 정렬"], sorted_indices, current_indices)
         results["선택 정렬"] = arr.copy()
     
     if insertion_sort_selected:
         arr = st.session_state.array.copy()
         frames["삽입 정렬"] = []
         sorted_indices = []
-        execution_times["삽입 정렬"] = insertion_sort(arr, frames["삽입 정렬"], sorted_indices)
+        current_indices = []
+        execution_times["삽입 정렬"] = insertion_sort(arr, frames["삽입 정렬"], sorted_indices, current_indices)
         results["삽입 정렬"] = arr.copy()
     
     # 애니메이션 표시
@@ -113,21 +123,23 @@ if st.button("정렬 시작"):
         st.subheader(f"{algo_name} 진행 중")
         plot_placeholder = st.empty()
         
-        for frame, sorted_idx in frames[algo_name]:
+        for frame, sorted_idx, current_idx in frames[algo_name]:
             fig, ax = plt.subplots(figsize=(10, 4))
             bars = ax.bar(range(len(frame)), frame)
             
-            # 정렬된 막대는 녹색으로, 나머지는 분홍색으로 표시
+            # 막대 색상 설정
             for i, bar in enumerate(bars):
                 if i in sorted_idx:
-                    bar.set_color('green')
+                    bar.set_color('green')  # 정렬 완료된 막대
+                elif i in current_idx:
+                    bar.set_color('pink')   # 현재 비교/교환 중인 막대
                 else:
-                    bar.set_color('pink')
+                    bar.set_color('blue')   # 아직 정렬되지 않은 막대
             
             ax.set_title(f"{algo_name} 진행 중")
             plot_placeholder.pyplot(fig)
             plt.close()
-            time.sleep(speed)
+            time.sleep(1.0/speed)  # 속도 조절
     
     # 정렬 완료 후 결과 표시
     st.subheader("정렬 완료!")
