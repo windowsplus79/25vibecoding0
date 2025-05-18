@@ -7,9 +7,8 @@ matplotlib.use('Agg')
 import matplotlib.font_manager as fm
 
 # 한글 폰트 설정
-font_path = 'C:/Windows/Fonts/malgun.ttf'  # Windows의 기본 한글 폰트 경로
-font_prop = fm.FontProperties(fname=font_path)
-matplotlib.rcParams['font.family'] = 'Malgun Gothic'
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['NanumGothic', 'Malgun Gothic', 'AppleGothic', 'sans-serif']
 matplotlib.rcParams['axes.unicode_minus'] = False
 matplotlib.rcParams['font.size'] = 12
 
@@ -91,7 +90,7 @@ st.subheader("초기 배열")
 initial_plot = st.empty()
 fig, ax = plt.subplots(figsize=(10, 4))
 bars = ax.bar(range(len(st.session_state.array)), st.session_state.array, color='blue')
-ax.set_title("정렬 전 배열", fontproperties=font_prop)
+ax.set_title("정렬 전 배열")
 initial_plot.pyplot(fig)
 plt.close()
 
@@ -145,7 +144,7 @@ if st.button("정렬 시작"):
                 else:
                     bar.set_color('blue')   # 아직 정렬되지 않은 막대
             
-            ax.set_title(f"{algo_name} 진행 중", fontproperties=font_prop)
+            ax.set_title(f"{algo_name} 진행 중")
             plot_placeholder.pyplot(fig)
             plt.close()
             time.sleep(1.0/speed)  # 속도 조절
@@ -155,7 +154,7 @@ if st.button("정렬 시작"):
     for algo_name, result in results.items():
         fig, ax = plt.subplots(figsize=(10, 4))
         bars = ax.bar(range(len(result)), result, color='green')
-        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)", fontproperties=font_prop)
+        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)")
         st.pyplot(fig)
         plt.close()
 
