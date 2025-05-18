@@ -4,6 +4,7 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
+plt.rcParams['font.family'] = 'Malgun Gothic'  # 한글 폰트 설정
 
 # ✅ 페이지 설정은 반드시 최상단에
 st.set_page_config(page_title="정렬 알고리즘 시각화", page_icon="📊", layout="centered")
@@ -25,8 +26,9 @@ selection_sort_selected = st.sidebar.checkbox("선택 정렬")
 insertion_sort_selected = st.sidebar.checkbox("삽입 정렬")
 
 # 랜덤 배열 생성
-if 'array' not in st.session_state:
+if 'array' not in st.session_state or 'array_size' not in st.session_state or st.session_state.array_size != array_size:
     st.session_state.array = np.random.randint(1, 100, array_size)
+    st.session_state.array_size = array_size
 
 # 정렬 함수들
 def bubble_sort(arr, frames, sorted_indices, current_indices):
@@ -153,4 +155,5 @@ if st.button("정렬 시작"):
 # 새 배열 생성 버튼
 if st.button("새 배열 생성"):
     st.session_state.array = np.random.randint(1, 100, array_size)
+    st.session_state.array_size = array_size
     st.experimental_rerun()
