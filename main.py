@@ -25,11 +25,24 @@ array_size = st.sidebar.slider("배열 크기", 5, 50, 20)
 speed = st.sidebar.select_slider("정렬 속도", options=[125.0, 250.0, 375.0, 500.0], value=250.0)
 sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 
-# 정렬 알고리즘 선택 (체크박스)
+# 정렬 알고리즘 선택 (라디오 버튼)
 st.sidebar.header("정렬 알고리즘 선택")
-bubble_sort_selected = st.sidebar.checkbox("버블 정렬", value=True)
-selection_sort_selected = st.sidebar.checkbox("선택 정렬")
-insertion_sort_selected = st.sidebar.checkbox("삽입 정렬")
+selected_algorithm = st.sidebar.radio("알고리즘", ["버블 정렬", "선택 정렬", "삽입 정렬"])
+
+# 정렬 시작 버튼
+if st.sidebar.button("정렬 시작", type="primary"):
+    st.session_state.sorting = True
+else:
+    st.session_state.sorting = False
+
+# 수행평가 버튼
+st.sidebar.markdown("""
+<div style='text-align: center; margin: 20px 0;'>
+    <a href='https://forms.gle/2hc8i1iKb7LLwuVK7' target='_blank' style='padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;'>
+        수행평가 시작
+    </a>
+</div>
+""", unsafe_allow_html=True)
 
 # 랜덤 배열 생성
 if 'array' not in st.session_state or 'array_size' not in st.session_state or st.session_state.array_size != array_size:
@@ -102,7 +115,7 @@ if st.button("정렬 시작"):
     execution_times = {}
     
     # 선택된 알고리즘 실행
-    if bubble_sort_selected:
+    if selected_algorithm == "버블 정렬":
         arr = st.session_state.array.copy()
         frames["버블 정렬"] = []
         sorted_indices = []
@@ -110,7 +123,7 @@ if st.button("정렬 시작"):
         execution_times["버블 정렬"] = bubble_sort(arr, frames["버블 정렬"], sorted_indices, current_indices)
         results["버블 정렬"] = arr.copy()
     
-    if selection_sort_selected:
+    elif selected_algorithm == "선택 정렬":
         arr = st.session_state.array.copy()
         frames["선택 정렬"] = []
         sorted_indices = []
@@ -118,7 +131,7 @@ if st.button("정렬 시작"):
         execution_times["선택 정렬"] = selection_sort(arr, frames["선택 정렬"], sorted_indices, current_indices)
         results["선택 정렬"] = arr.copy()
     
-    if insertion_sort_selected:
+    elif selected_algorithm == "삽입 정렬":
         arr = st.session_state.array.copy()
         frames["삽입 정렬"] = []
         sorted_indices = []
