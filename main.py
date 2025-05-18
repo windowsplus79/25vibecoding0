@@ -29,17 +29,11 @@ sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 st.sidebar.header("정렬 알고리즘 선택")
 selected_algorithm = st.sidebar.radio("알고리즘", ["버블 정렬", "선택 정렬", "삽입 정렬"])
 
-# 정렬 시작 버튼
-if st.sidebar.button("정렬 시작", type="primary"):
-    st.session_state.sorting = True
-else:
-    st.session_state.sorting = False
-
-# 수행평가 버튼
+# 형성평가 버튼
 st.sidebar.markdown("""
 <div style='text-align: center; margin: 20px 0;'>
     <a href='https://forms.gle/2hc8i1iKb7LLwuVK7' target='_blank' style='padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;'>
-        수행평가 시작
+        형성평가 시작
     </a>
 </div>
 """, unsafe_allow_html=True)
