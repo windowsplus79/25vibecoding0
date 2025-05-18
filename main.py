@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 # ✅ 페이지 설정은 반드시 최상단에
 st.set_page_config(page_title="정렬 알고리즘 시각화", page_icon="📊", layout="centered")
 
-# 눈 효과 (기본 내장)
-st.snow()
-
 # 타이틀
 st.title("📊 정렬 알고리즘 시각화")
 st.markdown("다양한 정렬 알고리즘의 동작 과정을 시각적으로 확인해보세요!")
