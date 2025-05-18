@@ -4,8 +4,14 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
+import matplotlib.font_manager as fm
+
+# 한글 폰트 설정
+font_path = 'C:/Windows/Fonts/malgun.ttf'  # Windows의 기본 한글 폰트 경로
+font_prop = fm.FontProperties(fname=font_path)
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['axes.unicode_minus'] = False
+matplotlib.rcParams['font.size'] = 12
 
 # ✅ 페이지 설정은 반드시 최상단에
 st.set_page_config(page_title="정렬 알고리즘 시각화", page_icon="📊", layout="centered")
@@ -17,7 +23,7 @@ st.markdown("다양한 정렬 알고리즘의 동작 과정을 시각적으로 �
 # 사이드바 설정
 st.sidebar.header("설정")
 array_size = st.sidebar.slider("배열 크기", 5, 50, 20)
-speed = st.sidebar.select_slider("정렬 속도", options=[2.5, 5.0, 7.5, 10.0], value=5.0)
+speed = st.sidebar.select_slider("정렬 속도", options=[12.5, 25.0, 37.5, 50.0], value=25.0)
 sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 
 # 정렬 알고리즘 선택 (체크박스)
@@ -85,7 +91,7 @@ st.subheader("초기 배열")
 initial_plot = st.empty()
 fig, ax = plt.subplots(figsize=(10, 4))
 bars = ax.bar(range(len(st.session_state.array)), st.session_state.array, color='blue')
-ax.set_title("정렬 전 배열", fontproperties='Malgun Gothic')
+ax.set_title("정렬 전 배열", fontproperties=font_prop)
 initial_plot.pyplot(fig)
 plt.close()
 
@@ -139,7 +145,7 @@ if st.button("정렬 시작"):
                 else:
                     bar.set_color('blue')   # 아직 정렬되지 않은 막대
             
-            ax.set_title(f"{algo_name} 진행 중", fontproperties='Malgun Gothic')
+            ax.set_title(f"{algo_name} 진행 중", fontproperties=font_prop)
             plot_placeholder.pyplot(fig)
             plt.close()
             time.sleep(1.0/speed)  # 속도 조절
@@ -149,7 +155,7 @@ if st.button("정렬 시작"):
     for algo_name, result in results.items():
         fig, ax = plt.subplots(figsize=(10, 4))
         bars = ax.bar(range(len(result)), result, color='green')
-        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)", fontproperties='Malgun Gothic')
+        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)", fontproperties=font_prop)
         st.pyplot(fig)
         plt.close()
 
