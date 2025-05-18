@@ -22,7 +22,7 @@ st.markdown("다양한 정렬 알고리즘의 동작 과정을 시각적으로 �
 # 사이드바 설정
 st.sidebar.header("설정")
 array_size = st.sidebar.slider("배열 크기", 5, 50, 20)
-speed = st.sidebar.select_slider("정렬 속도", options=[12.5, 25.0, 37.5, 50.0], value=25.0)
+speed = st.sidebar.select_slider("정렬 속도", options=[125.0, 250.0, 375.0, 500.0], value=250.0)
 sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 
 # 정렬 알고리즘 선택 (체크박스)
