@@ -4,7 +4,8 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
-plt.rcParams['font.family'] = 'Malgun Gothic'  # 한글 폰트 설정
+matplotlib.rcParams['font.family'] = 'Malgun Gothic'
+matplotlib.rcParams['axes.unicode_minus'] = False
 
 # ✅ 페이지 설정은 반드시 최상단에
 st.set_page_config(page_title="정렬 알고리즘 시각화", page_icon="📊", layout="centered")
@@ -84,7 +85,7 @@ st.subheader("초기 배열")
 initial_plot = st.empty()
 fig, ax = plt.subplots(figsize=(10, 4))
 bars = ax.bar(range(len(st.session_state.array)), st.session_state.array, color='blue')
-ax.set_title("정렬 전 배열")
+ax.set_title("정렬 전 배열", fontproperties='Malgun Gothic')
 initial_plot.pyplot(fig)
 plt.close()
 
@@ -138,7 +139,7 @@ if st.button("정렬 시작"):
                 else:
                     bar.set_color('blue')   # 아직 정렬되지 않은 막대
             
-            ax.set_title(f"{algo_name} 진행 중")
+            ax.set_title(f"{algo_name} 진행 중", fontproperties='Malgun Gothic')
             plot_placeholder.pyplot(fig)
             plt.close()
             time.sleep(1.0/speed)  # 속도 조절
@@ -148,7 +149,7 @@ if st.button("정렬 시작"):
     for algo_name, result in results.items():
         fig, ax = plt.subplots(figsize=(10, 4))
         bars = ax.bar(range(len(result)), result, color='green')
-        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)")
+        ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)", fontproperties='Malgun Gothic')
         st.pyplot(fig)
         plt.close()
 
