@@ -29,6 +29,12 @@ sort_order = st.sidebar.radio("정렬 방향", ["오름차순", "내림차순"])
 st.sidebar.header("정렬 알고리즘 선택")
 selected_algorithm = st.sidebar.radio("알고리즘", ["버블 정렬", "선택 정렬", "삽입 정렬"])
 
+# 정렬 시작 버튼
+if st.sidebar.button("정렬 시작", type="primary"):
+    st.session_state.sorting = True
+else:
+    st.session_state.sorting = False
+
 # 형성평가 버튼
 st.sidebar.markdown("""
 <div style='text-align: center; margin: 20px 0;'>
@@ -102,7 +108,7 @@ initial_plot.pyplot(fig)
 plt.close()
 
 # 정렬 실행 버튼
-if st.button("정렬 시작"):
+if st.session_state.sorting:
     # 선택된 알고리즘에 대한 결과를 저장할 딕셔너리
     results = {}
     frames = {}
@@ -164,9 +170,3 @@ if st.button("정렬 시작"):
         ax.set_title(f"{algo_name} 결과 (실행 시간: {execution_times[algo_name]:.3f}초)")
         st.pyplot(fig)
         plt.close()
-
-# 새 배열 생성 버튼
-if st.button("새 배열 생성"):
-    st.session_state.array = np.random.randint(1, 100, array_size)
-    st.session_state.array_size = array_size
-    st.experimental_rerun()
